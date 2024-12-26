@@ -11,6 +11,7 @@ dotenv.config();
 
 const app = express();
 const PORT = ENV_VARS.PORT;
+const __dirname = path.resolve();
 
 // middlewear
 app.use(cors());
