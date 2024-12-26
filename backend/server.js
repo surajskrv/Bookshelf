@@ -6,7 +6,6 @@ import { MongoClient, ServerApiVersion, ObjectId } from "mongodb";
 import { ENV_VARS } from "./config/envVars.js";
 import path from "path";
 
-
 dotenv.config();
 
 const app = express();
@@ -17,9 +16,9 @@ const __dirname = path.resolve();
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("This is from Backend");
-});
+// app.get("/", (req, res) => {
+//   res.send("This is from Backend");
+// });
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(ENV_VARS.MONGO_URI, {
@@ -100,15 +99,13 @@ async function run() {
 }
 run().catch(console.dir);
 
-if (ENV_VARS.NODE_ENV === "production") {
-	app.use(express.static(path.join(__dirname, "/frontend/dist")));
+app.use(express.static(path.join(__dirname, "/frontend/dist")));
 
-	app.get("*", (req, res) => {
-		res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
-	});
-}
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+});
 
 app.listen(PORT, () => {
-	console.log("Server started at http://localhost:" + PORT);
-	connectDB();
+  console.log("Server started at http://localhost:" + PORT);
+  connectDB();
 });
