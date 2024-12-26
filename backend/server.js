@@ -4,6 +4,8 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 import { MongoClient, ServerApiVersion, ObjectId } from "mongodb";
 import { ENV_VARS } from "./config/envVars.js";
+import path from "path";
+
 
 dotenv.config();
 
@@ -96,6 +98,14 @@ async function run() {
   }
 }
 run().catch(console.dir);
+
+if (ENV_VARS.NODE_ENV === "production") {
+	app.use(express.static(path.join(__dirname, "/frontend/dist")));
+
+	app.get("*", (req, res) => {
+		res.sendFile(path.resolve(__dirname, "frontend", "dist", "index.html"));
+	});
+}
 
 app.listen(PORT, () => {
 	console.log("Server started at http://localhost:" + PORT);
